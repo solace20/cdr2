@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.solace.mapper.MenuMapper" >
+  <resultMap id="BaseResultMap" type="com.solace.pojo.Menu" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="menu_name" property="menuName" jdbcType="VARCHAR" />
+    <result column="menu_desc" property="menuDesc" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="menu_level" property="menuLevel" jdbcType="VARCHAR" />
+    <result column="menu_father" property="menuFather" jdbcType="VARCHAR" />
+    <result column="menu_link" property="menuLink" jdbcType="VARCHAR" />
+    <result column="menu_isDisplay" property="menuIsdisplay" jdbcType="VARCHAR" />
+    <result column="menu_backup" property="menuBackup" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, menu_name, menu_desc, create_time, modify_time, menu_level, menu_father, menu_link, 
+    menu_isDisplay, menu_backup
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.solace.pojo.MenuExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from self_menu
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from self_menu
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from self_menu
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.solace.pojo.MenuExample" >
+    delete from self_menu
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.solace.pojo.Menu" >
+    insert into self_menu (id, menu_name, menu_desc, 
+      create_time, modify_time, menu_level, 
+      menu_father, menu_link, menu_isDisplay, 
+      menu_backup)
+    values (#{id,jdbcType=VARCHAR}, #{menuName,jdbcType=VARCHAR}, #{menuDesc,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, #{menuLevel,jdbcType=VARCHAR}, 
+      #{menuFather,jdbcType=VARCHAR}, #{menuLink,jdbcType=VARCHAR}, #{menuIsdisplay,jdbcType=VARCHAR}, 
+      #{menuBackup,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.solace.pojo.Menu" >
+    insert into self_menu
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="menuName != null" >
+        menu_name,
+      </if>
+      <if test="menuDesc != null" >
+        menu_desc,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+      <if test="menuLevel != null" >
+        menu_level,
+      </if>
+      <if test="menuFather != null" >
+        menu_father,
+      </if>
+      <if test="menuLink != null" >
+        menu_link,
+      </if>
+      <if test="menuIsdisplay != null" >
+        menu_isDisplay,
+      </if>
+      <if test="menuBackup != null" >
+        menu_backup,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="menuName != null" >
+        #{menuName,jdbcType=VARCHAR},
+      </if>
+      <if test="menuDesc != null" >
+        #{menuDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="menuLevel != null" >
+        #{menuLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="menuFather != null" >
+        #{menuFather,jdbcType=VARCHAR},
+      </if>
+      <if test="menuLink != null" >
+        #{menuLink,jdbcType=VARCHAR},
+      </if>
+      <if test="menuIsdisplay != null" >
+        #{menuIsdisplay,jdbcType=VARCHAR},
+      </if>
+      <if test="menuBackup != null" >
+        #{menuBackup,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.solace.pojo.MenuExample" resultType="java.lang.Integer" >
+    select count(*) from self_menu
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update self_menu
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.menuName != null" >
+        menu_name = #{record.menuName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.menuDesc != null" >
+        menu_desc = #{record.menuDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifyTime != null" >
+        modify_time = #{record.modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.menuLevel != null" >
+        menu_level = #{record.menuLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.menuFather != null" >
+        menu_father = #{record.menuFather,jdbcType=VARCHAR},
+      </if>
+      <if test="record.menuLink != null" >
+        menu_link = #{record.menuLink,jdbcType=VARCHAR},
+      </if>
+      <if test="record.menuIsdisplay != null" >
+        menu_isDisplay = #{record.menuIsdisplay,jdbcType=VARCHAR},
+      </if>
+      <if test="record.menuBackup != null" >
+        menu_backup = #{record.menuBackup,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update self_menu
+    set id = #{record.id,jdbcType=VARCHAR},
+      menu_name = #{record.menuName,jdbcType=VARCHAR},
+      menu_desc = #{record.menuDesc,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      modify_time = #{record.modifyTime,jdbcType=TIMESTAMP},
+      menu_level = #{record.menuLevel,jdbcType=VARCHAR},
+      menu_father = #{record.menuFather,jdbcType=VARCHAR},
+      menu_link = #{record.menuLink,jdbcType=VARCHAR},
+      menu_isDisplay = #{record.menuIsdisplay,jdbcType=VARCHAR},
+      menu_backup = #{record.menuBackup,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.solace.pojo.Menu" >
+    update self_menu
+    <set >
+      <if test="menuName != null" >
+        menu_name = #{menuName,jdbcType=VARCHAR},
+      </if>
+      <if test="menuDesc != null" >
+        menu_desc = #{menuDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="menuLevel != null" >
+        menu_level = #{menuLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="menuFather != null" >
+        menu_father = #{menuFather,jdbcType=VARCHAR},
+      </if>
+      <if test="menuLink != null" >
+        menu_link = #{menuLink,jdbcType=VARCHAR},
+      </if>
+      <if test="menuIsdisplay != null" >
+        menu_isDisplay = #{menuIsdisplay,jdbcType=VARCHAR},
+      </if>
+      <if test="menuBackup != null" >
+        menu_backup = #{menuBackup,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.solace.pojo.Menu" >
+    update self_menu
+    set menu_name = #{menuName,jdbcType=VARCHAR},
+      menu_desc = #{menuDesc,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      menu_level = #{menuLevel,jdbcType=VARCHAR},
+      menu_father = #{menuFather,jdbcType=VARCHAR},
+      menu_link = #{menuLink,jdbcType=VARCHAR},
+      menu_isDisplay = #{menuIsdisplay,jdbcType=VARCHAR},
+      menu_backup = #{menuBackup,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

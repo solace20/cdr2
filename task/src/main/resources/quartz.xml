@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+<beans>
+    <!--日常Job-->
+    <bean id="DailyTaskQtzJob" class="com.solace.quartz.MyJob"></bean>
+    <bean id="DailyTaskQtzJobMethod" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="DailyTaskQtzJob"/>
+        </property>
+        <property name="targetMethod">  <!--要执行的方法-->
+            <value>execute</value>
+        </property>
+    </bean>
+    <!--调度触发器-->
+    <bean id="DailyTaskCronTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="DailyTaskQtzJobMethod"></property>
+        <!--触发时间 5秒执行一次-->
+        <property name="cronExpression" value="0/5 * * * * ?"></property>
+    </bean>
+    <!--调度工厂-->
+    <bean id="SpringJobSchedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <ref bean="DailyTaskCronTriggerBean"/>
+            </list>
+        </property>
+    </bean>
+</beans>

@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.solace.mapper.DepartMapper" >
+  <resultMap id="BaseResultMap" type="com.solace.pojo.Depart" >
+    <id column="depart_ID" property="departId" jdbcType="VARCHAR" />
+    <result column="id" property="id" jdbcType="VARCHAR" />
+    <result column="depart_name" property="departName" jdbcType="VARCHAR" />
+    <result column="depart_desc" property="departDesc" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="depart_isUse" property="departIsuse" jdbcType="VARCHAR" />
+    <result column="depart_father" property="departFather" jdbcType="VARCHAR" />
+    <result column="depart_companyID" property="departCompanyid" jdbcType="VARCHAR" />
+    <result column="depart_companyName" property="departCompanyname" jdbcType="VARCHAR" />
+    <result column="depart_backup" property="departBackup" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    depart_ID, id, depart_name, depart_desc, create_time, modify_time, depart_isUse, 
+    depart_father, depart_companyID, depart_companyName, depart_backup
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.solace.pojo.DepartExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from self_depart
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from self_depart
+    where depart_ID = #{departId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from self_depart
+    where depart_ID = #{departId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.solace.pojo.DepartExample" >
+    delete from self_depart
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.solace.pojo.Depart" >
+    insert into self_depart (depart_ID, id, depart_name, 
+      depart_desc, create_time, modify_time, 
+      depart_isUse, depart_father, depart_companyID, 
+      depart_companyName, depart_backup)
+    values (#{departId,jdbcType=VARCHAR}, #{id,jdbcType=VARCHAR}, #{departName,jdbcType=VARCHAR}, 
+      #{departDesc,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, 
+      #{departIsuse,jdbcType=VARCHAR}, #{departFather,jdbcType=VARCHAR}, #{departCompanyid,jdbcType=VARCHAR}, 
+      #{departCompanyname,jdbcType=VARCHAR}, #{departBackup,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.solace.pojo.Depart" >
+    insert into self_depart
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="departId != null" >
+        depart_ID,
+      </if>
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="departName != null" >
+        depart_name,
+      </if>
+      <if test="departDesc != null" >
+        depart_desc,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+      <if test="departIsuse != null" >
+        depart_isUse,
+      </if>
+      <if test="departFather != null" >
+        depart_father,
+      </if>
+      <if test="departCompanyid != null" >
+        depart_companyID,
+      </if>
+      <if test="departCompanyname != null" >
+        depart_companyName,
+      </if>
+      <if test="departBackup != null" >
+        depart_backup,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="departId != null" >
+        #{departId,jdbcType=VARCHAR},
+      </if>
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="departName != null" >
+        #{departName,jdbcType=VARCHAR},
+      </if>
+      <if test="departDesc != null" >
+        #{departDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="departIsuse != null" >
+        #{departIsuse,jdbcType=VARCHAR},
+      </if>
+      <if test="departFather != null" >
+        #{departFather,jdbcType=VARCHAR},
+      </if>
+      <if test="departCompanyid != null" >
+        #{departCompanyid,jdbcType=VARCHAR},
+      </if>
+      <if test="departCompanyname != null" >
+        #{departCompanyname,jdbcType=VARCHAR},
+      </if>
+      <if test="departBackup != null" >
+        #{departBackup,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.solace.pojo.DepartExample" resultType="java.lang.Integer" >
+    select count(*) from self_depart
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update self_depart
+    <set >
+      <if test="record.departId != null" >
+        depart_ID = #{record.departId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.departName != null" >
+        depart_name = #{record.departName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.departDesc != null" >
+        depart_desc = #{record.departDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifyTime != null" >
+        modify_time = #{record.modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.departIsuse != null" >
+        depart_isUse = #{record.departIsuse,jdbcType=VARCHAR},
+      </if>
+      <if test="record.departFather != null" >
+        depart_father = #{record.departFather,jdbcType=VARCHAR},
+      </if>
+      <if test="record.departCompanyid != null" >
+        depart_companyID = #{record.departCompanyid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.departCompanyname != null" >
+        depart_companyName = #{record.departCompanyname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.departBackup != null" >
+        depart_backup = #{record.departBackup,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update self_depart
+    set depart_ID = #{record.departId,jdbcType=VARCHAR},
+      id = #{record.id,jdbcType=VARCHAR},
+      depart_name = #{record.departName,jdbcType=VARCHAR},
+      depart_desc = #{record.departDesc,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      modify_time = #{record.modifyTime,jdbcType=TIMESTAMP},
+      depart_isUse = #{record.departIsuse,jdbcType=VARCHAR},
+      depart_father = #{record.departFather,jdbcType=VARCHAR},
+      depart_companyID = #{record.departCompanyid,jdbcType=VARCHAR},
+      depart_companyName = #{record.departCompanyname,jdbcType=VARCHAR},
+      depart_backup = #{record.departBackup,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.solace.pojo.Depart" >
+    update self_depart
+    <set >
+      <if test="id != null" >
+        id = #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="departName != null" >
+        depart_name = #{departName,jdbcType=VARCHAR},
+      </if>
+      <if test="departDesc != null" >
+        depart_desc = #{departDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="departIsuse != null" >
+        depart_isUse = #{departIsuse,jdbcType=VARCHAR},
+      </if>
+      <if test="departFather != null" >
+        depart_father = #{departFather,jdbcType=VARCHAR},
+      </if>
+      <if test="departCompanyid != null" >
+        depart_companyID = #{departCompanyid,jdbcType=VARCHAR},
+      </if>
+      <if test="departCompanyname != null" >
+        depart_companyName = #{departCompanyname,jdbcType=VARCHAR},
+      </if>
+      <if test="departBackup != null" >
+        depart_backup = #{departBackup,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where depart_ID = #{departId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.solace.pojo.Depart" >
+    update self_depart
+    set id = #{id,jdbcType=VARCHAR},
+      depart_name = #{departName,jdbcType=VARCHAR},
+      depart_desc = #{departDesc,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      depart_isUse = #{departIsuse,jdbcType=VARCHAR},
+      depart_father = #{departFather,jdbcType=VARCHAR},
+      depart_companyID = #{departCompanyid,jdbcType=VARCHAR},
+      depart_companyName = #{departCompanyname,jdbcType=VARCHAR},
+      depart_backup = #{departBackup,jdbcType=VARCHAR}
+    where depart_ID = #{departId,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,114 @@
+@charset "utf-8";
+/* CSS Document */
+
+body{margin:0;padding:0;background-repeat:no-repeat;
+	background-image: -moz-linear-gradient( 90deg, rgb(255,255,255) 54%, rgb(132,209,233) 72%, rgb(77,169,213) 84%, rgb(15,93,178) 96%, rgb(0,65,164) 100%, rgb(0,57,161) 100%);
+  	background-image: -webkit-linear-gradient( 90deg, rgb(255,255,255) 54%, rgb(132,209,233) 72%, rgb(77,169,213) 84%, rgb(15,93,178) 96%, rgb(0,65,164) 100%, rgb(0,57,161) 100%);
+  	background-image: -ms-linear-gradient( 90deg, rgb(255,255,255) 54%, rgb(132,209,233) 72%, rgb(77,169,213) 84%, rgb(15,93,178) 96%, rgb(0,65,164) 100%, rgb(0,57,161) 100%);
+}
+
+.title{
+	padding-top:5%;
+  	font-size: 38px;
+  	font-family: "微软雅黑";
+  	color:#fff;
+  	text-shadow: 0.5px 0.866px 3px #000;  /**设置文字阴影***/
+  	text-align:center;
+}
+.img{margin-top:8%;margin-left:8%;width:auto;float:left;}
+
+
+/**  登录样式  **/
+
+.form-horizontal{
+	/**margin-top: 0px;**/
+	width: 380px;
+	margin-left:60%;
+	margin-top:5%;
+	height: 340px;
+    background-color: #fff;
+    border-radius:0 0 5px 5px;
+    padding-top: 20px;
+	box-shadow: 3px 6px 20px 10px #bababa;
+}
+.userlog{	
+  font-size: 24px;
+  font-family: "Microsoft YaHei";
+  color: #1b93e1;
+  margin-top:10px;
+  text-align:center;
+  margin-bottom:30px;
+}
+
+.row{width: 380px;position:relative;}
+.label_pos{
+	position:relative;
+	left: 45px;
+	font-size: 19px;
+	color: #aaaaaa;
+}
+.row .input-username{
+	height: 35px;
+	width: 300px;
+	margin-bottom:27px;
+	margin-left:20px;
+	font-size: 14px;
+	padding-left: 30px;
+	border: 1px solid #ddd;
+    box-sizing: border-box;
+    transition: all 0.2s linear 0s;
+}
+.row .input-password{
+	height: 35px;
+	width: 300px;
+	margin-bottom:27px;
+	margin-left:22px;
+	font-size: 14px;
+	padding-left: 30px;
+	border: 1px solid #ddd;
+    box-sizing: border-box;
+    transition: all 0.2s linear 0s;
+}
+.row .input-text{
+	height: 35px;
+	width: 130px;
+	margin-bottom:27px;
+	margin-left:40px;
+	padding-left: 10px;
+	font-size: 14px;
+	border: 1px solid #ddd;
+    box-sizing: border-box;
+    transition: all 0.2s linear 0s;
+}
+.code_img{
+	height: 35px;
+	padding-left:15px;
+	position:absolute;
+	top:1px;
+}
+
+#kanbuq{/**color: #0764ae;**/
+  position:absolute;
+  top:15px;
+  left:285px;
+  font-size: 14px;
+  font-family: "Microsoft YaHei";
+  color: #999;
+}
+
+#login{
+	width: 300px;
+	height: 45px;
+	background-color: #12a3da;
+	border-radius: 3px;
+	margin-top:10px;
+	border:0;
+	color: #fff;
+	font-size: 18px;
+	text-align:center;
+	font-family: "Microsoft YaHei";	
+}
+
+
+
+

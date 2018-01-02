@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="GBK"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:tx="http://www.springframework.org/schema/tx"
+	   xmlns:task="http://www.springframework.org/schema/task" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	   xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+	   xmlns:mvc="http://www.springframework.org/schema/mvc"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd 
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.1.xsd
+		http://code.alibabatech.com/schema/dubbo        http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+		http://www.springframework.org/schema/data/mongo       
+        http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd"
+	   default-autowire="byName">
+	<!--<context:property-placeholder location="classpath:config/local/jdbc.properties,classpath:config/local/redis.properties" />-->
+	<!-- 将多个配置文件读取到容器中，交给Spring管理 -->
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<!-- 这里支持多种寻址方式：classpath和file -->
+				<value>classpath:config/local/jdbc.properties</value>
+				<!-- 推荐使用file的方式引入，这样可以将配置和代码分离 -->
+				<value>classpath:config/local/redis.properties</value>
+				<!--<value>file:/opt/demo/config/demo-remote.properties</value>-->
+				<value>classpath:config/local/mongodb.properties</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://121.201.29.188:3306/cdr2" />
+		<property name="username" value="cdr" />
+		<property name="password" value="Jinfa803" />
+		<!-- 初始化连接大小 -->
+		<property name="initialSize" value="0"></property>
+		<!-- 连接池最大数量 -->
+		<property name="maxActive" value="20"></property>
+		<!-- 连接池最小空闲 -->
+		<property name="minIdle" value="0"></property>
+		<!-- 获取连接最大等待时间 -->
+		<property name="maxWait" value="60000"></property>
+		<property name="validationQuery" value="SELECT ''"></property>
+		<property name="testOnBorrow" value="false" />
+		<property name="testOnReturn" value="false" />
+		<property name="testWhileIdle" value="true" />
+
+		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+		<property name="minEvictableIdleTimeMillis" value="25200000" />
+
+		<!-- 打开removeAbandoned功能 -->
+		<property name="removeAbandoned" value="true" />
+		<!-- 1800秒，也就是30分钟 -->
+		<property name="removeAbandonedTimeout" value="1800" />
+		<!-- 关闭abanded连接时输出错误日志 -->
+		<property name="logAbandoned" value="true" />
+
+		<!-- 监控数据库 -->
+		<!-- <property name="filters" value="stat" /> -->
+		<property name="filters" value="mergeStat" />
+	</bean>
+    <!-- 配置druid监控spring jdbc -->
+    <bean id="druid-stat-interceptor"
+          class="com.alibaba.druid.support.spring.stat.DruidStatInterceptor">
+    </bean>
+
+    <tx:advice id="transactionAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="save*" propagation="REQUIRED"/>
+            <tx:method name="del*" propagation="REQUIRED"/>
+            <tx:method name="update*" propagation="REQUIRED"/>
+            <tx:method name="add*" propagation="SUPPORTS"/>
+            <tx:method name="find*" propagation="NOT_SUPPORTED"/>
+            <tx:method name="get*" propagation="NOT_SUPPORTED"/>
+            <tx:method name="apply*" propagation="REQUIRED"/>
+            <tx:method name="send*" propagation="REQUIRED"/>
+        </tx:attributes>
+    </tx:advice>
+    <!--****** 织入  *********-->
+    <aop:config>
+        <aop:advisor advice-ref="transactionAdvice" pointcut="execution(* com.solace.service.*.*(..))"/>
+    </aop:config>
+	<!-- spring和MyBatis完美整合，不需要mybatis的配置映射文件 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<!-- 自动扫描mapping.xml文件 -->
+		<property name="mapperLocations" value="classpath:com/solace/mapping/*.xml"></property>
+	</bean>
+
+	<!-- DAO接口所在包名，Spring会自动查找其下的类 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.solace.mapper" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+	</bean>
+
+	<!-- (事务管理)transaction manager, use JtaTransactionManager for global tx -->
+	<bean id="transactionManager"
+		  class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<context:annotation-config />
+	<!-- 启动SpringMVC的注解功能，它会自动注册HandlerMapping、HandlerAdapter、ExceptionResolver的相关实例 -->
+	<mvc:annotation-driven >
+		<!-- 消息转换器 -->
+		<mvc:message-converters register-defaults="true">
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+				<property name="supportedMediaTypes" value="text/html;charset=UTF-8" />
+			</bean>
+			<bean
+					class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<value>text/html; charset=UTF-8</value>
+						<value>application/json;charset=UTF-8</value>
+					</list>
+				</property>
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+	<mvc:default-servlet-handler />
+	<context:component-scan base-package="com.solace" />
+	<import resource="dubbo-provider.xml"></import>
+	<import resource="redis-config.xml"></import>
+	<!--<import resource="kafka-producer-config.xml"></import>
+   	<import resource="kafka-consumer-config.xml"></import>
+	<import resource="mongodb.xml"></import>-->
+
+
+
+
+	<!--<mongo:mongo host="192.168.18.128" port="10001">
+		<mongo:options connections-per-host="10" threads-allowed-to-block-for-connection-multiplier="10" auto-connect-retry="true" connect-timeout="5000"/>
+	</mongo:mongo>
+
+	&lt;!&ndash; mongo的工厂，通过它来取得mongo实例,dbname为mongodb的数据库名，没有的话会自动创建 &ndash;&gt;
+	<mongo:db-factory dbname="test" mongo-ref="mongo" />
+
+	&lt;!&ndash; mongodb的主要操作对象，所有对mongodb的增删改查的操作都是通过它完成 &ndash;&gt;
+	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+		<constructor-arg name="mongoDbFactory" ref="mongoDbFactory" />
+	</bean>
+	<mongo:mapping-converter base-package="com.solace.collection"/>
+	<mongo:repositories base-package="com.solace.repository"/>-->
+
+
+
+	<!-- 对静态资源文件的访问-->
+	<mvc:resources mapping="/images/**" location="/WEB-INF/images/" cache-period="31556926"/>
+	<mvc:resources mapping="/js/**" location="/WEB-INF/js/" cache-period="31556926"/>
+	<mvc:resources mapping="/css/**" location="/WEB-INF/css/" cache-period="31556926"/>
+
+</beans>
