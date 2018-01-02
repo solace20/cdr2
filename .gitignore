@@ -11,6 +11,6 @@ producer/src/main/java/com/solace/controller/
 producer/src/main/resources/config/beta/
 producer/src/main/resources/config/online/
 producer/target/
-src/main/resources/
+src
 task/target/
 /.idea/
