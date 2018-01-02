@@ -1,6 +1,6 @@
 # Created by .ignore support plugin (hsz.mobi)
 
-.idea/*
+/.idea/*
 .idea/workspace.xml
 common-bean/src/main/resources/
 common-bean/target/
@@ -13,4 +13,4 @@ producer/src/main/resources/config/online/
 producer/target/
 src
 task/target/
-/.idea/
+
